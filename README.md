@@ -16,4 +16,5 @@ socket() 함수 호출을 통해 소켓을 생성하고, 소켓 주소할당을 
 그 다음 listen() 함수 호출을 통해, 연결요청 대기 상태로 진입했다. 연결 요청 대기 큐의 크기는 3으로 설정했다. 
 Concurrent한 Server를 구현하기 위해, 멀티 프로세스 기반의 코드를 작성했다. fork() 함수를 통해 생성된 자식 프로세스가 client로부터 온 token 정보를 read 하도록 했다. 그런데 여러 개의 자식 프로세스가 각자 받은 token 정보를 하나의 문자열로 취합해야 했다. 그래서 부모 자식 프로세스 간 통신에 사용되는 pipe를 사용했다. 각 자식 프로세스는 개별 token을 파이프의 한 종단에 write 한다. 
 각 자식 프로세스가 보낸 token 정보를 취합하여, ipv4 클라이언트로 보내는 역할은 또 하나의 fork() 함수 호출로 생성된 자식 프로세스가 담당한다. Pipe의 또 다른 종단에서 반복문을 통해 token 정보를 받아, strcat 함수를 이용해 하나의 문자열로 만든다. 이 문자열을, named pipe를 이용해 ipv4_client에게 전달했다.  
+
 ![image](https://user-images.githubusercontent.com/41155899/148782269-e76cfb94-cab1-45fd-9ca2-3ca06ceacbff.png)
